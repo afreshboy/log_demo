@@ -11,6 +11,7 @@ RUN apk update \
 WORKDIR /opt/application
 
 COPY output/main /opt/application/main
+COPY run.sh /opt/application/
 
 USER root
 CMD cd /opt/application && ./main
