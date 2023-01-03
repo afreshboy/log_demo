@@ -40,7 +40,7 @@ func AddAndGetCount(w http.ResponseWriter, req *http.Request) {
 
 func CallAnotherService(w http.ResponseWriter, req *http.Request) {
 	serviceID := req.Header.Get("X-SERVICE-ID")
-	domain := fmt.Sprintf("%s.dycloud.service/v1/ping", serviceID)
+	domain := fmt.Sprintf("%s.dycloud.service", serviceID)
 	uri := req.Header.Get("X-SERVICE-URI")
 	paramName := req.Header.Get("X-PARAM-NAME")
 	paramValue := req.Header.Get("X-PARAM-VALUE")
