@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"log"
@@ -20,10 +21,40 @@ type Item struct {
 }
 
 func main() {
-	AsyncPrintLog()
+	http.HandleFunc("/api/v1/AddAndGetCount", AddAndGetCount)
+	http.HandleFunc("/api/v1/CallAnotherService", CallAnotherService)
 	http.HandleFunc("/api/v1/ping", Ping)
 	http.ListenAndServe(":8000", nil)
 
+}
+
+func AddAndGetCount(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("AddAndGetCount start")
+	req.ParseForm()
+	numStr := req.Form.Get("num")
+	num, _ := strconv.Atoi(numStr)
+	num++
+	fmt.Printf("AddAndGetCount return num: %d\n", num)
+	w.Write([]byte(strconv.Itoa(num)))
+}
+
+func CallAnotherService(w http.ResponseWriter, req *http.Request) {
+	serviceID := req.Header.Get("X-SERVICE-ID")
+	domain := fmt.Sprintf("%s.dycloud.service/v1/ping", serviceID)
+	uri := req.Header.Get("X-SERVICE-URI")
+	paramName := req.Header.Get("X-PARAM-NAME")
+	paramValue := req.Header.Get("X-PARAM-VALUE")
+	resp, err := http.Get(fmt.Sprintf("%s%s?%s=%s", domain, uri, paramName, paramValue))
+	if err != nil {
+		w.Write([]byte(fmt.Sprintf("error: %+v", err)))
+	}
+	var body []byte
+	_, err = resp.Body.Read(body)
+	if err != nil {
+		w.Write([]byte(fmt.Sprintf("error: %+v", err)))
+	}
+	w.Write(body)
+	fmt.Println("CallAnotherService")
 }
 
 func Ping(w http.ResponseWriter, req *http.Request) {
