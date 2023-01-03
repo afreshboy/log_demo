@@ -10,6 +10,7 @@ RUN apk update \
 
 WORKDIR /opt/application
 
+RUN ./build.sh
 COPY output/main /opt/application/main
 COPY run.sh /opt/application/
 
