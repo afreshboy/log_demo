@@ -5,7 +5,8 @@ run sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 RUN apk update \
   &&  apk upgrade  \
-  &&  apk add bash 
+  &&  apk add bash \
+  && apk add curl
 
 WORKDIR /opt/application
 
