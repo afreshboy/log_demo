@@ -43,11 +43,13 @@ func CallAnotherService(w http.ResponseWriter, req *http.Request) {
 	serviceID := req.Header.Get("X-SERVICE-ID")
 	domain := fmt.Sprintf("%s.dycloud.service", serviceID)
 	uri := req.Header.Get("X-SERVICE-URI")
-	paramName := req.Header.Get("X-PARAM-NAME")
-	paramValue := req.Header.Get("X-PARAM-VALUE")
-	resp, err := http.Get(fmt.Sprintf("%s%s?%s=%s", domain, uri, paramName, paramValue))
+	url := fmt.Sprintf("%s%s", domain, uri)
+	fmt.Printf("url: %s\n", url)
+	resp, err := http.Get(url)
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("error: %+v", err)))
+		fmt.Printf("error: %+v\n", err)
+		return
 	}
 	var body []byte
 	_, err = resp.Body.Read(body)
