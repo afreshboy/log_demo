@@ -23,7 +23,7 @@ type Item struct {
 func main() {
 	http.HandleFunc("/api/v1/add_and_get_count", AddAndGetCount)
 	http.HandleFunc("/api/v1/call_another_service", CallAnotherService)
-	http.HandleFunc("/api/v1/ping", Ping)
+	http.HandleFunc("/v1/ping", Ping)
 	http.ListenAndServe(":8000", nil)
 
 }
