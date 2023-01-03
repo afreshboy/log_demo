@@ -58,7 +58,7 @@ func CallAnotherService(w http.ResponseWriter, req *http.Request) {
 }
 
 func Ping(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("hello")
+	fmt.Println("hello test")
 }
 
 func AsyncPrintLog() {
