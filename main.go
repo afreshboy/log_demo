@@ -56,14 +56,8 @@ func CallAnotherService(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("error: %+v", err)))
 	}
-	fmt.Printf("resp:%+v, write: %s", resp, s)
-	body, err := json.Marshal(s)
-	if err != nil {
-		w.Write([]byte(fmt.Sprintf("error: %+v", err)))
-		fmt.Printf("error: %+v\n", err)
-		return
-	}
-	w.Write(body)
+	fmt.Printf("resp:%+v, write: %s\n", resp, s)
+	w.Write([]byte(s))
 	fmt.Println("CallAnotherService")
 }
 
