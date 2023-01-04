@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 	"time"
@@ -51,10 +52,16 @@ func CallAnotherService(w http.ResponseWriter, req *http.Request) {
 		fmt.Printf("error: %+v\n", err)
 		return
 	}
-	var body []byte
-	_, err = resp.Body.Read(body)
+	s, _ := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("error: %+v", err)))
+	}
+	fmt.Printf("resp:%+v, write: %s", resp, s)
+	body, err := json.Marshal(s)
+	if err != nil {
+		w.Write([]byte(fmt.Sprintf("error: %+v", err)))
+		fmt.Printf("error: %+v\n", err)
+		return
 	}
 	w.Write(body)
 	fmt.Println("CallAnotherService")
