@@ -61,11 +61,11 @@ func CallAnotherService(w http.ResponseWriter, req *http.Request) {
 }
 
 func Ping(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("hello ping1")
+	fmt.Println("hello /v1/ping")
 }
 
 func Ping2(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("hello ping2")
+	fmt.Println("hello /api/v1/ping")
 }
 
 func AsyncPrintLog() {
