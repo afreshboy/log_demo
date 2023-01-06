@@ -21,13 +21,18 @@ type Item struct {
 
 func main() {
 	AsyncPrintLog()
-	http.HandleFunc("/api/v1/ping", Ping)
+	http.HandleFunc("/v1/ping", Ping1)
+	http.HandleFunc("/api/v1/ping", Ping2)
 	http.ListenAndServe(":8000", nil)
 
 }
 
-func Ping(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("hello")
+func Ping1(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("helloping1")
+}
+
+func Ping2(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("helloping2")
 }
 
 func AsyncPrintLog() {
