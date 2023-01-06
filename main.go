@@ -27,7 +27,6 @@ func main() {
 	http.HandleFunc("/v1/ping", Ping)
 	http.HandleFunc("/api/v1/ping", Ping2)
 	http.ListenAndServe(":8000", nil)
-	AsyncPrintLog()
 }
 
 func AddAndGetCount(w http.ResponseWriter, req *http.Request) {
