@@ -7,6 +7,13 @@ COPY . /app/
 # 执行代码编译命令。操作系统参数为linux，编译后的二进制产物命名为main，并存放在当前目录下。
 RUN GOOS=linux go build -o main .
 FROM public-cn-beijing.cr.volces.com/public/base:alpine-3.13
+RUN apk update && \
+    apk upgrade && \
+    apk add bash && \
+    apk add ca-certificates wget
+ENV DOUYINCLOUD_CERT_PATH=/etc/ssl/certs/douyincloud_egress.crt
+RUN wget https://raw.githubusercontent.com/bytedance/douyincloud_cert/master/douyincloud_egress.crt -O $DOUYINCLOUD_CERT_PATH
+RUN update-ca-certificates
 WORKDIR /opt/application
 COPY --from=builder /app/main /app/run.sh /opt/application/
 USER root

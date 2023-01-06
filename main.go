@@ -118,7 +118,7 @@ func TestDouKai(w http.ResponseWriter, r *http.Request) {
 		  }
 		]
 	  }`
-	fmt.Printf("start")
+	fmt.Println("start")
 	req, err := http.NewRequest("POST", url+param, bytes.NewBuffer([]byte(bodyStr)))
 	if err != nil {
 		fmt.Printf("http.NewRequest failed, err: %s\n", err.Error())
@@ -127,9 +127,9 @@ func TestDouKai(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		fmt.Printf("写入远端HTTP 错误, err: %s\n", err.Error())
+		fmt.Printf("写入远端HTTP 错误, err: %+v\n resp: %+v", err, resp)
 		return
 	}
-	fmt.Printf("resp: %+v", resp)
+	fmt.Printf("resp: %+v\n", resp)
 	defer resp.Body.Close()
 }
