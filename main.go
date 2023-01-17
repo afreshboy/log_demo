@@ -27,7 +27,8 @@ func main() {
 	http.HandleFunc("/api/v1/call_another_service", CallAnotherService)
 	http.HandleFunc("/v1/ping", Ping)
 	http.HandleFunc("/api/v1/ping", Ping2)
-	http.HandleFunc("/api/test_doukai", TestDouKai)
+	http.HandleFunc("/api/test_doukai_http", TestDouKaiHttp)
+	http.HandleFunc("/api/test_doukai_https", TestDouKaiHttps)
 	http.ListenAndServe(":8000", nil)
 }
 
@@ -101,7 +102,40 @@ func AsyncPrintLog() {
 	}()
 }
 
-func TestDouKai(w http.ResponseWriter, r *http.Request) {
+func TestDouKaiHttp(w http.ResponseWriter, r *http.Request) {
+	url := "http://developer.toutiao.com"
+	param := "/api/v2/tags/text/antidirt"
+
+	// body := &taskBody{
+	// 	tasks: []string{
+	// 		"1"},
+	// 	content: "Hello World",
+	// }
+	// bodyStr, _ := json.Marshal(body)
+	bodyStr := `{
+		"tasks": [
+		  {
+			"content": "要检测的文本"
+		  }
+		]
+	  }`
+	fmt.Println("start")
+	req, err := http.NewRequest("POST", url+param, bytes.NewBuffer([]byte(bodyStr)))
+	if err != nil {
+		fmt.Printf("http.NewRequest failed, err: %s\n", err.Error())
+		return
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		fmt.Printf("写入远端HTTP 错误, err: %+v\n resp: %+v", err, resp)
+		return
+	}
+	fmt.Printf("resp: %+v\n", resp)
+	defer resp.Body.Close()
+}
+
+func TestDouKaiHttps(w http.ResponseWriter, r *http.Request) {
 	url := "https://developer.toutiao.com"
 	param := "/api/v2/tags/text/antidirt"
 
