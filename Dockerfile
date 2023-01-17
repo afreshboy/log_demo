@@ -10,6 +10,7 @@ FROM public-cn-beijing.cr.volces.com/public/base:alpine-3.13
 RUN apk update && \
     apk upgrade && \
     apk add bash && \
+    apk add curl && \
     apk add ca-certificates wget
 ENV DOUYINCLOUD_CERT_PATH=/etc/ssl/certs/douyincloud_egress.crt
 RUN wget https://raw.githubusercontent.com/bytedance/douyincloud_cert/master/douyincloud_egress.crt -O $DOUYINCLOUD_CERT_PATH
