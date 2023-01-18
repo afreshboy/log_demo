@@ -29,7 +29,7 @@ func main() {
 	http.HandleFunc("/api/v1/ping", Ping2)
 	http.HandleFunc("/api/test_doukai_http", TestDouKaiHttp)
 	http.HandleFunc("/api/test_doukai_https", TestDouKaiHttps)
-	http.ListenAndServe(":8000", nil)
+	http.ListenAndServe(":8001", nil)
 }
 
 func AddAndGetCount(w http.ResponseWriter, req *http.Request) {
@@ -119,7 +119,7 @@ func TestDouKaiHttp(w http.ResponseWriter, r *http.Request) {
 		  }
 		]
 	  }`
-	fmt.Println("start")
+	fmt.Println("http start")
 	req, err := http.NewRequest("POST", url+param, bytes.NewBuffer([]byte(bodyStr)))
 	if err != nil {
 		fmt.Printf("http.NewRequest failed, err: %s\n", err.Error())
@@ -152,7 +152,7 @@ func TestDouKaiHttps(w http.ResponseWriter, r *http.Request) {
 		  }
 		]
 	  }`
-	fmt.Println("start")
+	fmt.Println("https start")
 	req, err := http.NewRequest("POST", url+param, bytes.NewBuffer([]byte(bodyStr)))
 	if err != nil {
 		fmt.Printf("http.NewRequest failed, err: %s\n", err.Error())
