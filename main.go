@@ -29,7 +29,7 @@ func main() {
 	http.HandleFunc("/api/v1/ping", Ping2)
 	http.HandleFunc("/api/test_doukai_http", TestDouKaiHttp)
 	http.HandleFunc("/api/test_doukai_https", TestDouKaiHttps)
-	http.ListenAndServe(":8000", nil)
+	http.ListenAndServe(":8001", nil)
 }
 
 func AddAndGetCount(w http.ResponseWriter, req *http.Request) {
@@ -103,24 +103,12 @@ func AsyncPrintLog() {
 }
 
 func TestDouKaiHttp(w http.ResponseWriter, r *http.Request) {
-	url := "http://developer.toutiao.com"
-	param := "/api/v2/tags/text/antidirt"
+	url := "http://developer.toutiao.com/api/v2/tags/text/antidirt"
 
-	// body := &taskBody{
-	// 	tasks: []string{
-	// 		"1"},
-	// 	content: "Hello World",
-	// }
-	// bodyStr, _ := json.Marshal(body)
-	bodyStr := `{
-		"tasks": [
-		  {
-			"content": "要检测的文本"
-		  }
-		]
-	  }`
+	data := `{"tasks": [{"content": "要检测的文本"}]}`
 	fmt.Println("http start")
-	req, err := http.NewRequest("POST", url+param, bytes.NewBuffer([]byte(bodyStr)))
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(data)))
+	req.Header.Add("Content-Type", "application/json")
 	if err != nil {
 		fmt.Printf("http.NewRequest failed, err: %s\n", err.Error())
 		return
@@ -136,24 +124,11 @@ func TestDouKaiHttp(w http.ResponseWriter, r *http.Request) {
 }
 
 func TestDouKaiHttps(w http.ResponseWriter, r *http.Request) {
-	url := "https://developer.toutiao.com"
-	param := "/api/v2/tags/text/antidirt"
+	url := "https://developer.toutiao.com/api/v2/tags/text/antidirt"
 
-	// body := &taskBody{
-	// 	tasks: []string{
-	// 		"1"},
-	// 	content: "Hello World",
-	// }
-	// bodyStr, _ := json.Marshal(body)
-	bodyStr := `{
-		"tasks": [
-		  {
-			"content": "要检测的文本"
-		  }
-		]
-	  }`
-	fmt.Println("https start")
-	req, err := http.NewRequest("POST", url+param, bytes.NewBuffer([]byte(bodyStr)))
+	data := `{"tasks": [{"content": "要检测的文本"}]}`
+	fmt.Println("http start")
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(data)))
 	if err != nil {
 		fmt.Printf("http.NewRequest failed, err: %s\n", err.Error())
 		return

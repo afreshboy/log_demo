@@ -7,6 +7,7 @@ COPY . /app/
 # 执行代码编译命令。操作系统参数为linux，编译后的二进制产物命名为main，并存放在当前目录下。
 RUN GOOS=linux go build -o main .
 FROM public-cn-beijing.cr.volces.com/public/base:alpine-3.13
+run sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories 
 RUN apk update \
   &&  apk upgrade  \
   &&  apk add bash  \
