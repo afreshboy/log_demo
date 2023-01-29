@@ -108,12 +108,11 @@ func TestDouKaiHttp(w http.ResponseWriter, r *http.Request) {
 	data := `{"tasks": [{"content": "要检测的文本"}]}`
 	fmt.Println("http start")
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(data)))
-	req.Header.Add("Content-Type", "application/json")
 	if err != nil {
 		fmt.Printf("http.NewRequest failed, err: %s\n", err.Error())
 		return
 	}
-
+	req.Header.Add("Content-Type", "application/json")
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		fmt.Printf("写入远端HTTP 错误, err: %+v\n resp: %+v", err, resp)
@@ -133,7 +132,7 @@ func TestDouKaiHttps(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("http.NewRequest failed, err: %s\n", err.Error())
 		return
 	}
-
+	req.Header.Add("Content-Type", "application/json")
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		fmt.Printf("写入远端HTTP 错误, err: %+v\n resp: %+v", err, resp)
