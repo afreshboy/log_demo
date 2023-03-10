@@ -66,6 +66,7 @@ func PostCount(w http.ResponseWriter, req *http.Request) {
 
 func InternalCall(w http.ResponseWriter, req *http.Request) {
 	toServiceID := req.Header.Get("X-SERVICE-ID")
+	fmt.Printf("toServiceID: %s", toServiceID)
 	method := req.Header.Get("X-SERVICE-METHOD")
 	v := req.Header.Get("X-SERVICE-VALUE")
 	uri := req.Header.Get("X-SERVICE-URI")
@@ -98,11 +99,13 @@ func InternalCall(w http.ResponseWriter, req *http.Request) {
 
 func InternalCallGet(uri, toServiceID string, paramMap map[string]string, headers map[string]string) (*http.Response, error) {
 	fromServiceID := os.Getenv("SERVICE_ID")
+	fmt.Printf("fromServiceID: %s\n", fromServiceID)
 	urlValue := &url.URL{
 		Scheme: "http",
 		Host:   fmt.Sprintf("%s-%s.dycloud.service", fromServiceID, toServiceID),
 		Path:   uri,
 	}
+	fmt.Printf("Host: %s\n", urlValue.Host)
 	params := url.Values{}
 	for k, v := range paramMap {
 		params.Set(k, v)
