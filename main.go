@@ -97,10 +97,10 @@ func InternalCall(w http.ResponseWriter, req *http.Request) {
 }
 
 func InternalCallGet(uri, toServiceID string, paramMap map[string]string, headers map[string]string) (*http.Response, error) {
-	fromServiceID := os.Getenv("service_id")
+	fromServiceID := os.Getenv("SERVICE_ID")
 	urlValue := &url.URL{
 		Scheme: "http",
-		Host:   fmt.Sprintf("%s-%s.dycloud.service", fromServiceID, os.Getenv("service_id")),
+		Host:   fmt.Sprintf("%s-%s.dycloud.service", fromServiceID, toServiceID),
 		Path:   uri,
 	}
 	params := url.Values{}
@@ -122,8 +122,8 @@ func InternalCallGet(uri, toServiceID string, paramMap map[string]string, header
 }
 
 func InternalCallPost(uri, toServiceID string, body io.Reader, headers map[string]string) (*http.Response, error) {
-	fromServiceID := os.Getenv("service_id")
-	urlPath := fmt.Sprintf("http://%s-%s.dycloud.service%s", fromServiceID, os.Getenv("service_id"), uri)
+	fromServiceID := os.Getenv("SERVICE_ID")
+	urlPath := fmt.Sprintf("http://%s-%s.dycloud.service%s", fromServiceID, toServiceID, uri)
 	req, err := http.NewRequest("POST", urlPath, body)
 	if err != nil {
 		fmt.Printf("http.NewRequest failed, err: %+v\n", err)
