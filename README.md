@@ -1,1 +1,1 @@
-# log_demo
+# log_demo_go
