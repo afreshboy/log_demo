@@ -26,7 +26,8 @@ type Item struct {
 }
 
 type CountReq struct {
-	Num int `json:"num"`
+	Num1 int `json:"num1"`
+	Num2 int `json:"num2"`
 }
 
 func main() {
@@ -41,11 +42,12 @@ func main() {
 func GetCount(w http.ResponseWriter, req *http.Request) {
 	fmt.Println("GetCount start")
 	req.ParseForm()
-	numStr := req.Form.Get("num")
-	num, _ := strconv.Atoi(numStr)
-	num++
-	fmt.Printf("GetCount return num: %d\n", num)
-	w.Write([]byte(strconv.Itoa(num)))
+	numStr1 := req.Form.Get("num1")
+	num1, _ := strconv.Atoi(numStr1)
+	numStr2 := req.Form.Get("num2")
+	num2, _ := strconv.Atoi(numStr2)
+	fmt.Printf("GetCount return num: %d\n", num1+num2)
+	w.Write([]byte(strconv.Itoa(num1 + num2)))
 }
 
 func PostCount(w http.ResponseWriter, req *http.Request) {
@@ -58,25 +60,27 @@ func PostCount(w http.ResponseWriter, req *http.Request) {
 		w.Write([]byte(fmt.Sprintf("json.Unmarshal failed, err: %+v", err)))
 		return
 	}
-	num := countReq.Num
-	num++
-	fmt.Printf("PostCount return num: %d\n", num)
-	w.Write([]byte(strconv.Itoa(num)))
+	num1 := countReq.Num1
+	num2 := countReq.Num2
+	fmt.Printf("PostCount return num: %d\n", num1+num2)
+	w.Write([]byte(strconv.Itoa(num1 + num2)))
 }
 
 func InternalCall(w http.ResponseWriter, req *http.Request) {
 	toServiceID := req.Header.Get("X-SERVICE-ID")
 	fmt.Printf("toServiceID: %s", toServiceID)
 	method := req.Header.Get("X-SERVICE-METHOD")
-	v := req.Header.Get("X-SERVICE-VALUE")
+	v1 := req.Header.Get("X-SERVICE-VALUE1")
+	v2 := req.Header.Get("X-SERVICE-VALUE2")
 	uri := req.Header.Get("X-SERVICE-URI")
 	var resp *http.Response
 	var err error
 	if method == "GET" {
-		resp, err = InternalCallGet(uri, toServiceID, map[string]string{"num": v}, map[string]string{"X-Test-Header1": "testHeader1"})
+		resp, err = InternalCallGet(uri, toServiceID, map[string]string{"num1": v1, "num2": v2}, map[string]string{"X-Test-Header1": "testHeader1"})
 	} else if method == "POST" {
-		num, _ := strconv.Atoi(v)
-		body, _ := json.Marshal(CountReq{Num: num})
+		num1, _ := strconv.Atoi(v1)
+		num2, _ := strconv.Atoi(v2)
+		body, _ := json.Marshal(CountReq{Num1: num1, Num2: num2})
 		resp, err = InternalCallPost(uri, toServiceID, bytes.NewBuffer(body), map[string]string{"X-Test-Header1": "testHeader1"})
 	} else {
 		w.Write([]byte(fmt.Sprintf("error: %+v", fmt.Errorf("invalid method: %s", method))))
