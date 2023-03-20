@@ -75,6 +75,7 @@ func InternalCall(w http.ResponseWriter, req *http.Request) {
 	uri := req.Header.Get("X-SERVICE-URI")
 	var resp *http.Response
 	var err error
+	defer resp.Body.Close()
 	if method == "GET" {
 		resp, err = InternalCallGet(uri, toServiceID, map[string]string{"num1": v1, "num2": v2}, map[string]string{"X-Test-Header1": "testHeader1"})
 	} else if method == "POST" {
@@ -83,15 +84,24 @@ func InternalCall(w http.ResponseWriter, req *http.Request) {
 		body, _ := json.Marshal(CountReq{Num1: num1, Num2: num2})
 		resp, err = InternalCallPost(uri, toServiceID, bytes.NewBuffer(body), map[string]string{"X-Test-Header1": "testHeader1"})
 	} else {
+		w.WriteHeader(403)
 		w.Write([]byte(fmt.Sprintf("error: %+v", fmt.Errorf("invalid method: %s", method))))
 	}
 
 	if err != nil {
+		w.WriteHeader(500)
 		w.Write([]byte(fmt.Sprintf("error: %+v", err)))
 		fmt.Printf("error: %+v\n", err)
 		return
 	}
-	defer resp.Body.Close()
+
+	if !(resp.StatusCode >= 200 && resp.StatusCode < 300) {
+		w.WriteHeader(500)
+		w.Write([]byte(fmt.Sprintf("statuscode: %d", resp.StatusCode)))
+		fmt.Printf("statuscode: %d\n", resp.StatusCode)
+		return
+	}
+
 	s, _ := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		w.Write([]byte(fmt.Sprintf("error: %+v", err)))
