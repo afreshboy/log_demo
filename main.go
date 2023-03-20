@@ -75,7 +75,7 @@ func InternalCall(w http.ResponseWriter, req *http.Request) {
 	uri := req.Header.Get("X-SERVICE-URI")
 	var resp *http.Response
 	var err error
-	defer resp.Body.Close()
+
 	if method == "GET" {
 		resp, err = InternalCallGet(uri, toServiceID, map[string]string{"num1": v1, "num2": v2}, map[string]string{"X-Test-Header1": "testHeader1"})
 	} else if method == "POST" {
@@ -86,7 +86,10 @@ func InternalCall(w http.ResponseWriter, req *http.Request) {
 	} else {
 		w.WriteHeader(403)
 		w.Write([]byte(fmt.Sprintf("error: %+v", fmt.Errorf("invalid method: %s", method))))
+		return
 	}
+
+	defer resp.Body.Close()
 
 	if err != nil {
 		w.WriteHeader(500)
