@@ -28,8 +28,10 @@ func main() {
 	http.HandleFunc("/v1/ping", Ping)
 	http.HandleFunc("/api/v1/ping", Ping2)
 	http.HandleFunc("/api/test_doukai_http", TestDouKaiHttp)
+	http.HandleFunc("/api/test_doukai_http2", TestDouKaiHttp2)
 	http.HandleFunc("/api/test_doukai_https", TestDouKaiHttps)
-	http.ListenAndServe(":8000", nil)
+	http.HandleFunc("/api/test_doukai_https2", TestDouKaiHttps2)
+	http.ListenAndServe(":8001", nil)
 }
 
 func AddAndGetCount(w http.ResponseWriter, req *http.Request) {
@@ -120,6 +122,41 @@ func TestDouKaiHttp(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf("resp: %+v\n", resp)
 	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("body: %+v\n", string(body))
+	w.Write(body)
+}
+
+func TestDouKaiHttp2(w http.ResponseWriter, r *http.Request) {
+	url := "http://developer.toutiao.com/api/apps/v1/capacity/query_aweme_permission_list"
+
+	fmt.Println("http start")
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Printf("写入远端HTTP 错误, err: %+v\n resp: %+v", err, resp)
+		return
+	}
+	fmt.Printf("resp: %+v\n", resp)
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("body: %+v\n", string(body))
+	w.Write(body)
+}
+
+func TestDouKaiHttps2(w http.ResponseWriter, r *http.Request) {
+	url := "https://developer.toutiao.com/api/apps/v1/capacity/query_aweme_permission_list"
+
+	fmt.Println("http start")
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Printf("写入远端HTTP 错误, err: %+v\n resp: %+v", err, resp)
+		return
+	}
+	fmt.Printf("resp: %+v\n", resp)
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("body: %+v\n", string(body))
+	w.Write(body)
 }
 
 func TestDouKaiHttps(w http.ResponseWriter, r *http.Request) {
@@ -140,4 +177,7 @@ func TestDouKaiHttps(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf("resp: %+v\n", resp)
 	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("body: %+v\n", string(body))
+	w.Write(body)
 }

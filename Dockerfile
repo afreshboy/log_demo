@@ -15,9 +15,11 @@ RUN apk update \
   && apk add bind-tools  \
   && apk add ca-certificates wget  
 
-ENV DOUYINCLOUD_CERT_PATH=/etc/ssl/certs/douyincloud_egress.crt
-RUN wget https://raw.githubusercontent.com/bytedance/douyincloud_cert/master/douyincloud_egress.crt -O $DOUYINCLOUD_CERT_PATH
-RUN update-ca-certificates
+# ENV DOUYINCLOUD_CERT_PATH=/etc/ssl/certs/douyincloud_egress.crt
+# RUN wget https://raw.githubusercontent.com/bytedance/douyincloud_cert/master/douyincloud_egress.crt -O $DOUYINCLOUD_CERT_PATH
+
+
 WORKDIR /opt/application
-COPY --from=builder /app/main /app/run.sh /opt/application/
+COPY --from=builder /app/main /app/run.sh /app/dyc_local_debug.crt /opt/application/
+RUN cp /opt/application/dyc_local_debug.crt /etc/ssl/certs/dyc_local_debug.crt && update-ca-certificates
 USER root
