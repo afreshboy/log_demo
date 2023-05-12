@@ -31,7 +31,7 @@ func main() {
 	http.HandleFunc("/api/test_doukai_http2", TestDouKaiHttp2)
 	http.HandleFunc("/api/test_doukai_https", TestDouKaiHttps)
 	http.HandleFunc("/api/test_doukai_https2", TestDouKaiHttps2)
-	http.ListenAndServe(":8001", nil)
+	http.ListenAndServe(":8000", nil)
 }
 
 func AddAndGetCount(w http.ResponseWriter, req *http.Request) {
