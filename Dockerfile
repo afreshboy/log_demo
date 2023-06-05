@@ -9,4 +9,8 @@ RUN GOOS=linux go build -o main .
 FROM public-cn-beijing.cr.volces.com/public/base:alpine-3.13
 WORKDIR /opt/application
 COPY --from=builder /app/main /app/run.sh /opt/application/
+RUN apk update && \
+    apk upgrade && \
+    apk add bash && \
+    apk add curl 
 USER root
