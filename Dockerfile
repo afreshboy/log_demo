@@ -13,5 +13,4 @@ RUN apk update && \
     apk upgrade && \
     apk add bash && \
     apk add curl 
-RUN xxx
 USER root

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,6 +37,8 @@ func main() {
 	http.HandleFunc("/api/v1/internal_call", InternalCall)
 	http.HandleFunc("/v1/ping", Ping)
 	http.HandleFunc("/api/v1/ping", Ping2)
+	ctx := context.Background()
+	panic(ctx)
 	http.ListenAndServe(":8000", nil)
 }
 
